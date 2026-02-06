@@ -7,12 +7,16 @@ public class PlayerController : MonoBehaviour
 
     public float speed;
     public InputAction moveAction;
+    public InputAction shootAction;
 
     public Camera camera;
+
+    public GameObject foodPrefab;
 
     private void Awake()
     {
         moveAction = InputSystem.actions.FindAction("Move");
+        shootAction = InputSystem.actions.FindAction("Shoot");
     }
 
     // Update is called once per frame
@@ -21,8 +25,8 @@ public class PlayerController : MonoBehaviour
         var input = moveAction.ReadValue<Vector2>();
         var inputX = input.x;
 
-        
-        
+
+
         transform.Translate(inputX * speed * Time.deltaTime * Vector3.right);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -camera.orthographicSize, camera.orthographicSize), transform.position.y, transform.position.z);
 
@@ -34,6 +38,13 @@ public class PlayerController : MonoBehaviour
         //{
         //    transform.position = new Vector3(-10, transform.position.y, transform.position.z);
         //}
+
+        if (shootAction.triggered)
+        {
+            Instantiate(foodPrefab, transform.position, Quaternion.identity);
+        }
+
+
     }
 
     private void OnDrawGizmos()
